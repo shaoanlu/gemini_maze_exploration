@@ -5,4 +5,4 @@ A playground using LLM to explore/navigate a robot through an unknown environmen
 Work in progress.
 
 ## Result
-![](assets/floor1_result.gif)
+![](assets/floor1_result.gif) ![](assets/floor3_result.gif)
