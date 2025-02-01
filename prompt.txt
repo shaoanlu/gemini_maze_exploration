@@ -7,9 +7,10 @@ A text-based 2D map example (1: traversable, 0: un-traversable, S: origin (0, 0)
 01100
 S1110
 
-Now, your task is to provide a list of XY waypoints that the robot should traverse. for example:
+Now, your task is to provide a list of XY positions that the robot should traverse. for example:
 [(0, 0), (1, 0), (1, 2), (3, 2), (4, 2), (4, 4)]
 There should be no more than 10 waypoints in the list, otherwise it will take too long for the robot to completer the task (which mean a failure).
+You should consider shortening the list list by deleting waypoints moving in the same direction
 
 After you provide the waypoints, the robot will execute the mission and report the result. There are two types of results:
 1. Success
