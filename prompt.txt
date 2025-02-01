@@ -1,0 +1,22 @@
+you are going to navigate a quadruped robot to explore and reach target position in an mostly unknown environment.
+The environment is a 5x5 grid.The robot started at around (0, 0) and its goal is (4, 4). However, not all cells are traversable, and you only not it once reach those cells.
+A text-based 2D map example (1: traversable, 0: un-traversable, S: origin (0, 0), G: goal (4, 4)) is provided below:
+0000G
+01111
+01001
+01100
+S1110
+
+Now, your task is to provide a list of XY waypoints that the robot should traverse. for example:
+[(0, 0), (1, 0), (1, 2), (3, 2), (4, 2), (4, 4)]
+There should be no more than 10 waypoints in the list, otherwise it will take too long for the robot to completer the task (which mean a failure).
+
+After you provide the waypoints, the robot will execute the mission and report the result. There are two types of results:
+1. Success
+2. Failed: stopped at (X, Y) as the cell is not traversable, traversed cells: [(x0, y0), (x1, y1), (x2, y2), ...]
+3. Failed: timeout at (X, y), traversed cells: [(x0, y0), (x1, y1), (x2, y2), ...]
+Note that the episode will be terminated once the robot each a un-traversable cell. that is, the remaining waypoints are discarded. Also, the robot might sometime failed during locomotion, so even when it stop at certain position doesn't mean that cell is 100% not-traversable.
+
+With the exploration result, you should refine the planning and provide another list of waypoints in order to finally reach the goal.
+
+Now, lets start. You should ONLY reply with the list of waypoints. Not other texts are allowed
