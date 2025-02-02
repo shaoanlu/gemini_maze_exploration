@@ -23,7 +23,20 @@ Navigation Loop:
 ```
 
 ## Usage
+The demo can be run using free tier Google API key.
+
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shaoanlu/gemini_maze_exploration/blob/main/colab_demo.ipynb)
 
 ## Result
 ![](assets/floor1_result.gif) ![](assets/floor3_result.gif)
+
+## Learning note
+- Success rate is not 100%
+  - Prompt quality is crucial
+  - Include only necessary information to prevent reaching maximum token length
+- LLM is mainly for providing suggestions. Validation should be done using external verifier (i.e. simulation)
+- LLM do not reason but generates possible text.
+- Comparison between `gemini-2.0-flash-exp` and `gemini-2.0-flash-thinking-exp`
+  - Thinking model is better at following the instruction such as maximum waypoints in the suggestion
+    - With the trade-off of consecutively outputing the same suggestion?
+  - General model is better at exploration with different attemps.
