@@ -34,8 +34,9 @@ The demo can be run using free tier Google API key.
 - Success rate is not 100%
   - Prompt quality is crucial
   - Include only necessary information to prevent reaching maximum token length
-- LLM is mainly for providing suggestions. Validation should be done using external verifier (i.e. simulation)
-- LLM do not reason but generates possible text.
+- LLM do not reason or do actual planning but only generates possible text.
+- LLM is most suitable for providing suggestions based on instructions and feedbacks.
+  - In practice, validation should be done using external verifier (i.e. simulation)
 - Comparison between `gemini-2.0-flash-exp` and `gemini-2.0-flash-thinking-exp`
   - Thinking model is better at following the instruction such as maximum waypoints in the suggestion
     - With the trade-off of consecutively outputing the same suggestion?
