@@ -23,7 +23,7 @@ Navigation Loop:
 ```
 
 ## Usage
-Work in progress.
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shaoanlu/gemini_maze_exploration/blob/main/colab_demo.ipynb)
 
 ## Result
 ![](assets/floor1_result.gif) ![](assets/floor3_result.gif)
