@@ -28,6 +28,8 @@ The demo can be run using free tier Google API key. Python >= 3.10 is required.
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shaoanlu/gemini_maze_exploration/blob/main/colab_demo.ipynb)
 
 ## Result
+![](assets/go1_LLM_Navigation.gif)
+
 ![](assets/floor1_result.gif) ![](assets/floor3_result.gif)
 
 ## Learning note
