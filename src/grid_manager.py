@@ -18,7 +18,13 @@ class GridManager:
         self.img2grid_scale = self.config.image_size // self.config.grid_size[0]
 
     def load_from_image(self, image_path: str) -> np.ndarray:
-        """Load and process grid from image."""
+        """Load and process grid from image.
+
+        Thr output is a binary 2D grid where 1 represents a valid position and 0 an invalid one.
+        This method also involes a transformation of coordinates from image to grid space.
+        As image coordinates are (0, 0) at the top-left corner and grid coordinates are (0, 0) at the bottom-left corner,
+        we need to invert the y-axis and scale the coordinates accordingly.
+        """
         im = plt.imread(image_path, format="jpeg")
         for x in range(self.config.grid_size[0]):
             for y in range(self.config.grid_size[1]):

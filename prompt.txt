@@ -18,7 +18,7 @@ Provide only a list of coordinates in the format:
 
 Possible execution outcomes:
 1. Success: Robot reaches the goal
-2. Failed (Obstacle): "Failed: stopped at (X,Y), traversed cells: [(x0,y0), (x1,y1), ...]"
+2. Failed (Obstacle): "Failed: stop at (X,Y), traversed cells: [(x0,y0), (x1,y1), ...]"
    - Episode terminates when hitting an untraversable cell
    - Remaining waypoints are discarded
 3. Failed (Timeout): "Failed: timeout at (X,Y), traversed cells: [(x0,y0), (x1,y1), ...]"
