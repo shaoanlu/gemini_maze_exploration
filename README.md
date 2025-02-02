@@ -45,3 +45,9 @@ The demo can be run using free tier Google API key. Python >= 3.10 is required.
   - General model is better at exploration with different attemps.
 - Used Claude to refactor the code. It saved a lot of time but the result can be suboptimal.
   - Again, prompt quality is crucial
+- When asked the LLM to produce one waypoint at a time (each time w/ an image of the last frame of the simulation) instead of a list of wps, LLM navigates the robot to the goal posiiton after 35 steps and it seems like LLM was just providing exhaustive tries instead of using visual/spatial information for better navigation (see animation below)
+  - Maybe because I'm using an ordinary gemini instead of a gemioni-thinking moidel?
+  - probably unable to recognize the robot in the image? due to low resolution? too long tokens?
+  - Besides, I previous also experienced that LLM unable to judge whether a quadruped has fdalled down in an image. Maybe it is jmust not as smart as I think or the mujoco sim image is just out of domain.
+
+![](assets/Go1_LLM_Navigation_stepbystep.gif)
