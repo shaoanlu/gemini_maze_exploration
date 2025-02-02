@@ -25,7 +25,7 @@ def main():
     # Initialize components
     grid_config = GridConfig()
     grid_manager = GridManager(grid_config)
-    grid_manager.load_from_image("floor1.jpg")
+    grid_manager.load_from_image("assets/floor1.jpg")
 
     navigator = Navigator()
 
@@ -36,7 +36,7 @@ def main():
     use_thinking_model = True
     if use_thinking_model:
         client = genai.Client(api_key=API_KEY, http_options={"api_version": "v1alpha"})
-        chat = GeminiThinkChat(client, model_nanme="gemini-2.0-flash-thinking-exp")
+        chat = GeminiThinkChat(client, model_name="gemini-2.0-flash-thinking-exp")
     else:
         generativeai.configure(api_key=API_KEY)
         instruction = load_prompt_file(file_path="prompt.txt", encoding="utf-8")

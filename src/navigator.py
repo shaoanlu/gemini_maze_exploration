@@ -1,13 +1,15 @@
 from enum import Enum
 import numpy as np
-from typing import List, Optional
 
 
 class Direction(Enum):
-    RIGHT = np.array([1, 0])
-    UP = np.array([0, 1])
-    LEFT = np.array([-1, 0])
-    DOWN = np.array([0, -1])
+    RIGHT = (1, 0)
+    UP = (0, 1)
+    LEFT = (-1, 0)
+    DOWN = (0, -1)
+
+    def as_array(self) -> np.ndarray:
+        return np.array(self.value)
 
 
 class Navigator:
@@ -24,10 +26,10 @@ class Navigator:
             return cur_cell
 
         movements = [
-            cur_cell + Direction.RIGHT.value,
-            cur_cell + Direction.UP.value,
-            cur_cell + Direction.LEFT.value,
-            cur_cell + Direction.DOWN.value,
+            cur_cell + Direction.RIGHT.as_array(),
+            cur_cell + Direction.UP.as_array(),
+            cur_cell + Direction.LEFT.as_array(),
+            cur_cell + Direction.DOWN.as_array(),
         ]
 
         # move in a direciton that minimizes the distance to the target waypoint

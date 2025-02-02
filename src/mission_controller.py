@@ -5,13 +5,14 @@ import time
 
 from src.grid_manager import GridManager
 from src.navigator import Navigator
+from src.gemini_chat import GeminiChatInterface
 
 
 @dataclass
 class MissionConfig:
     goal: tuple = (4, 4)
     max_steps: int = 30
-    retry_delay: int = 5
+    retry_delay_sec: int = 5
     max_attempts: int = 20
     position_bounds: Tuple[float, float] = (-0.5, 0.5)
 
@@ -29,7 +30,7 @@ class MissionController:
         """Initialize random starting position."""
         return np.round(np.random.uniform(self.config.position_bounds[0], self.config.position_bounds[1], size=(2)), 1)
 
-    def execute_mission(self, model) -> Tuple[str, List[np.ndarray]]:
+    def execute_mission(self, model: GeminiChatInterface, debug: bool = False) -> Tuple[str, List[np.ndarray]]:
         """
         Execute complete navigation mission.
 
@@ -42,7 +43,8 @@ class MissionController:
             self.position_history = []
 
             # Prompt the LLM to get waypoints suggestion
-            prompt = f"Start. you are at ({self.current_position[0]}, {self.current_position[1]})"
+            if attempt == 0:
+                prompt = f"Start. you are at ({self.current_position[0]}, {self.current_position[1]})"
             self.waypoints = model.get_waypoints(prompt)
 
             # run the mission (simulation)
@@ -50,11 +52,16 @@ class MissionController:
             if result == "Success":
                 return (result, self.position_history)
 
+            # print debug information
+            if debug:
+                print(f"[Trial {attempt + 1}]\n{prompt=}\n{self.waypoints=}\n{result=}\n")
+            prompt = result
+
             # add a delay before retrying to avoid API rate limiting
-            time.sleep(self.config.retry_delay)
+            time.sleep(self.config.retry_delay_sec)
         return ("Failed: Max attempts reached", self.position_history)
 
-    def _execute_single_attempt(self) -> str:
+    def _execute_single_attempt(self, debug: bool = False) -> str:
         """
         Execute a single mission attempt.
         """
@@ -80,10 +87,15 @@ class MissionController:
             if is_at_last_waypoint and is_at_goal:
                 return "Success"
 
+            # print debug information
+            if debug:
+                print(f"{self.current_position=}, {target_position=}, {is_at_last_waypoint=}, {is_at_goal=}")
+
         return self._format_failure_message("Timeout")
 
     def _format_failure_message(self, failure_type: str) -> str:
         """Format failure message with position history."""
         x, y = self.current_position.astype(int)
-        return f"Failed: {failure_type} at ({x}, {y}), \
-            traversed cells: {[tuple(np.round(x_, 1)) for x_ in self.position_history]}"
+        return (
+            f"Failed: {failure_type} at ({x}, {y}), traversed cells: {[tuple(np.round(x_, 1)) for x_ in self.position_history]}"
+        )

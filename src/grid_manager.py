@@ -26,6 +26,7 @@ class GridManager:
         we need to invert the y-axis and scale the coordinates accordingly.
         """
         im = plt.imread(image_path, format="jpeg")
+        self.image = im
         for x in range(self.config.grid_size[0]):
             for y in range(self.config.grid_size[1]):
                 color = im[
