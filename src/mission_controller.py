@@ -38,6 +38,7 @@ class MissionController:
             str: Mission status
             List[np.ndarray]: List of traversed XY positions
         """
+        # Run the mission for a number of attempts, each time with a different init position and prompt
         for attempt in range(self.config.max_attempts):
             self.current_position = self.initialize_position()
             self.position_history = []
@@ -68,7 +69,7 @@ class MissionController:
         """
         target_waypoint_idx = 0  # index of the current target waypoint
 
-        # Traverse waypoints until reaching the last one or max steps are reached
+        # Traverse waypoints until reaching the goal or max steps or invalid position
         for _ in range(self.config.max_steps):
             target_position = self.waypoints[target_waypoint_idx]
             self.current_position = self.navigator.move_one_cell(self.current_position, target_position)
