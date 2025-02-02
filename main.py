@@ -1,10 +1,11 @@
 # main.py
-import google.generativeai as genai
+from google import generativeai, genai
 import os
 
-from grid_manager import GridManager, GridConfig
-from navigator import Navigator
-from mission_controller import MissionController, MissionConfig
+from src.grid_manager import GridManager, GridConfig
+from src.navigator import Navigator
+from src.mission_controller import MissionController, MissionConfig
+from src.gemini_chat import GeminiChat, GeminiThinkChat
 
 
 API_KEY = os.environ["GOOGLE_API_KEY"]
@@ -32,10 +33,15 @@ def main():
     mission_controller = MissionController(grid_manager, navigator, mission_config)
 
     # Initialize model
-    genai.configure(api_key=API_KEY)
-    instruction = load_prompt_file(file_path="prompt.txt", encoding="utf-8")
-    model = genai.GenerativeModel("models/gemini-2.0-flash-exp", system_instruction=instruction)
-    chat = model.start_chat()
+    use_thinking_model = True
+    if use_thinking_model:
+        client = genai.Client(api_key=API_KEY, http_options= {'api_version': 'v1alpha'})
+        chat = GeminiThinkChat(client, model_nanme='gemini-2.0-flash-thinking-exp')
+    else:
+        generativeai.configure(api_key=API_KEY)
+        instruction = load_prompt_file(file_path="prompt.txt", encoding="utf-8")
+        model = generativeai.GenerativeModel("models/gemini-2.0-flash-exp", system_instruction=instruction)
+        chat = GeminiChat(model)
 
     # Execute mission
     result = mission_controller.execute_mission(chat)
