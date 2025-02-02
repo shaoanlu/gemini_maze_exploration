@@ -49,13 +49,14 @@ class MissionController:
 
             # run the mission (simulation)
             result = self._execute_single_attempt()
-            if result == "Success":
-                return (result, self.position_history)
 
             # print debug information
             if debug:
                 print(f"[Trial {attempt + 1}]\n{prompt=}\n{self.waypoints=}\n{result=}\n")
             prompt = result
+
+            if result == "Success":
+                return (result, self.position_history)
 
             # add a delay before retrying to avoid API rate limiting
             time.sleep(self.config.retry_delay_sec)
