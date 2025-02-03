@@ -27,6 +27,9 @@ The demo can be run using free tier Google API key. Python >= 3.10 is required.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shaoanlu/gemini_maze_exploration/blob/main/notebooks/colab_demo.ipynb)
 
+This notebook is a demo for the same LLM planning strategy on a quadruped
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shaoanlu/gemini_maze_exploration/blob/main/notebooks/colab_go1_exploration.ipynb)
+
 ## Result
 ![](assets/go1_LLM_Navigation.gif)
 
