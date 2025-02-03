@@ -37,6 +37,7 @@ class TestMissionController(unittest.TestCase):
 
         self.config = MissionConfig()
 
+        # LLM model mock
         self.model = MagicMock()
         self.model.get_waypoints = MagicMock(return_value=[np.array([0.0, 0.0])])
 
@@ -67,7 +68,7 @@ class TestMissionController(unittest.TestCase):
         expected = (
             "Failed: Stop at (1, 2), traversed cells: [(np.float64(0.0), np.float64(0.0)), (np.float64(1.1), np.float64(2.2))]"
         )
-        self.assertEqual(message, expected)
+        self.assertEqual(message, expected, msg=message)
 
     @patch("time.sleep")
     def test_execute_mission_success(self, mock_sleep):
@@ -75,7 +76,7 @@ class TestMissionController(unittest.TestCase):
         # Mock initial position
         self.controller.initialize_position = MagicMock(return_value=np.array([0.0, 0.0]))
 
-        # Mock model response
+        # Mock LLM response
         self.model.get_waypoints.return_value = [np.array([0.0, 0.0]), np.array([4.0, 4.0])]
 
         # Mock navigation behavior
@@ -86,8 +87,8 @@ class TestMissionController(unittest.TestCase):
         result, history = self.controller.execute_mission(self.model)
 
         # Verify results
-        self.assertEqual(result, "Success")
-        self.assertEqual(len(history), 1)
+        self.assertEqual(result, "Success", msg=result)
+        self.assertEqual(len(history), 1, msg=history)
         np.testing.assert_array_equal(history[0], np.array([4.0, 4.0]))
         mock_sleep.assert_not_called()
 
@@ -105,9 +106,9 @@ class TestMissionController(unittest.TestCase):
         result, history = self.controller.execute_mission(self.model)
 
         # Verify results
-        self.assertEqual(result, "Failed: Max attempts reached")
+        self.assertEqual(result, "Failed: Max attempts reached", msg=result)
         mock_sleep.assert_called_with(self.config.retry_delay_sec)
-        self.assertEqual(mock_sleep.call_count, 2)
+        self.assertEqual(mock_sleep.call_count, 2)  # One call per attempt
 
     def test_execute_single_attempt_timeout(self):
         """Test single attempt failure due to timeout."""
@@ -122,7 +123,7 @@ class TestMissionController(unittest.TestCase):
         result = self.controller._execute_single_attempt()
 
         # Verify timeout
-        self.assertTrue(result.startswith("Failed: Timeout"))
+        self.assertTrue(result.startswith("Failed: Timeout"), msg=result)
         self.assertEqual(len(self.controller.position_history), 2)
 
     def test_execute_single_attempt_debug_mode(self):
