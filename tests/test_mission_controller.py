@@ -17,13 +17,7 @@ class TestMissionConfig(unittest.TestCase):
 
     def test_custom_values(self):
         """Test MissionConfig accepts custom values."""
-        config = MissionConfig(
-            goal=(2, 2),
-            max_steps=10,
-            retry_delay_sec=1,
-            max_attempts=5,
-            position_bounds=(-1.0, 1.0)
-        )
+        config = MissionConfig(goal=(2, 2), max_steps=10, retry_delay_sec=1, max_attempts=5, position_bounds=(-1.0, 1.0))
         self.assertEqual(config.goal, (2, 2))
         self.assertEqual(config.max_steps, 10)
         self.assertEqual(config.retry_delay_sec, 1)
@@ -37,20 +31,16 @@ class TestMissionController(unittest.TestCase):
         # Create mock classes with required methods
         self.grid_manager = MagicMock()
         self.grid_manager.is_valid_position = MagicMock(return_value=True)
-        
+
         self.navigator = MagicMock()
         self.navigator.move_one_cell = MagicMock(return_value=np.array([0.0, 0.0]))
-        
+
         self.config = MissionConfig()
-        
+
         self.model = MagicMock()
         self.model.get_waypoints = MagicMock(return_value=[np.array([0.0, 0.0])])
-        
-        self.controller = MissionController(
-            grid_manager=self.grid_manager,
-            navigator=self.navigator,
-            config=self.config
-        )
+
+        self.controller = MissionController(grid_manager=self.grid_manager, navigator=self.navigator, config=self.config)
 
     def test_initialization(self):
         """Test proper initialization of MissionController."""
@@ -59,7 +49,7 @@ class TestMissionController(unittest.TestCase):
         self.assertEqual(self.controller.waypoints, [])
         self.assertEqual(self.controller.position_history, [])
 
-    @patch('numpy.random.uniform')
+    @patch("numpy.random.uniform")
     def test_initialize_position(self, mock_uniform):
         """Test random position initialization."""
         mock_uniform.return_value = np.array([0.3, -0.2])
@@ -71,27 +61,23 @@ class TestMissionController(unittest.TestCase):
     def test_format_failure_message(self):
         """Test failure message formatting."""
         self.controller.current_position = np.array([1.1, 2.2])
-        self.controller.position_history = [
-            np.array([0.0, 0.0]),
-            np.array([1.1, 2.2])
-        ]
+        self.controller.position_history = [np.array([0.0, 0.0]), np.array([1.1, 2.2])]
 
         message = self.controller._format_failure_message("Stop")
-        expected = "Failed: Stop at (1, 2), traversed cells: [(np.float64(0.0), np.float64(0.0)), (np.float64(1.1), np.float64(2.2))]"
+        expected = (
+            "Failed: Stop at (1, 2), traversed cells: [(np.float64(0.0), np.float64(0.0)), (np.float64(1.1), np.float64(2.2))]"
+        )
         self.assertEqual(message, expected)
 
-    @patch('time.sleep')
+    @patch("time.sleep")
     def test_execute_mission_success(self, mock_sleep):
         """Test successful mission execution."""
         # Mock initial position
         self.controller.initialize_position = MagicMock(return_value=np.array([0.0, 0.0]))
-        
+
         # Mock model response
-        self.model.get_waypoints.return_value = [
-            np.array([0.0, 0.0]),
-            np.array([4.0, 4.0])
-        ]
-        
+        self.model.get_waypoints.return_value = [np.array([0.0, 0.0]), np.array([4.0, 4.0])]
+
         # Mock navigation behavior
         self.navigator.move_one_cell.return_value = np.array([4.0, 4.0])
         self.grid_manager.is_valid_position.return_value = True
@@ -105,7 +91,7 @@ class TestMissionController(unittest.TestCase):
         np.testing.assert_array_equal(history[0], np.array([4.0, 4.0]))
         mock_sleep.assert_not_called()
 
-    @patch('time.sleep')
+    @patch("time.sleep")
     def test_execute_mission_max_attempts(self, mock_sleep):
         """Test mission failure after maximum attempts."""
         # Configure test for failure
@@ -146,10 +132,10 @@ class TestMissionController(unittest.TestCase):
         self.grid_manager.is_valid_position.return_value = True
         self.navigator.move_one_cell.return_value = np.array([1.0, 1.0])
 
-        with patch('builtins.print') as mock_print:
+        with patch("builtins.print") as mock_print:
             self.controller._execute_single_attempt(debug=True)
             mock_print.assert_called()  # Verify debug information was printed
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

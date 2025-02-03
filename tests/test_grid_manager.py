@@ -33,7 +33,7 @@ class TestGridManager(unittest.TestCase):
         self.assertTrue(isinstance(self.grid_manager.grid, np.ndarray))
         self.assertEqual(self.grid_manager.grid.shape, (5, 5))
 
-    @patch('matplotlib.pyplot.imread')
+    @patch("matplotlib.pyplot.imread")
     def test_load_from_image(self, mock_imread):
         """Test loading and processing grid from image."""
         # Create a mock 50x50 image with known values
@@ -44,13 +44,13 @@ class TestGridManager(unittest.TestCase):
 
         # Test loading the image
         grid = self.grid_manager.load_from_image("dummy_path.jpg")
-        
+
         # Verify imread was called
         mock_imread.assert_called_once_with("dummy_path.jpg", format="jpeg")
-        
+
         # Check grid dimensions
         self.assertEqual(grid.shape, (5, 5))
-        
+
         # Verify specific grid values based on our mock image
         self.assertEqual(grid[0, 0], 1)  # Should be 1 where we set white pixels
         self.assertEqual(grid[1, 1], 0)  # Should be 0 in black areas
@@ -58,17 +58,13 @@ class TestGridManager(unittest.TestCase):
     def test_is_valid_position(self):
         """Test position validation in the grid."""
         # Set up a simple test grid
-        self.grid_manager.grid = np.array([
-            [1, 0, 1],
-            [0, 1, 0],
-            [1, 0, 1]
-        ])
+        self.grid_manager.grid = np.array([[1, 0, 1], [0, 1, 0], [1, 0, 1]])
         self.grid_manager.config = GridConfig(grid_size=(3, 3))
 
         # Test valid positions
         self.assertTrue(self.grid_manager.is_valid_position(np.array([0, 0])))
         self.assertTrue(self.grid_manager.is_valid_position(np.array([1, 1])))
-        
+
         # Test invalid positions
         self.assertFalse(self.grid_manager.is_valid_position(np.array([0, 1])))
         self.assertFalse(self.grid_manager.is_valid_position(np.array([3, 3])))  # Out of bounds
@@ -77,18 +73,18 @@ class TestGridManager(unittest.TestCase):
     def test_is_valid_position_edge_cases(self):
         """Test edge cases for position validation."""
         self.grid_manager.grid = np.ones((5, 5))  # All positions valid
-        
+
         # Test float inputs (should be converted to int)
         self.assertTrue(self.grid_manager.is_valid_position(np.array([0.9, 0.1])))
-        
+
         # Test positions exactly at boundaries
         self.assertTrue(self.grid_manager.is_valid_position(np.array([0, 0])))  # Bottom-left corner
         self.assertTrue(self.grid_manager.is_valid_position(np.array([4, 4])))  # Top-right corner
-        
+
         # Test out-of-bounds positions
         self.assertFalse(self.grid_manager.is_valid_position(np.array([5, 0])))
         self.assertFalse(self.grid_manager.is_valid_position(np.array([0, 5])))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
