@@ -81,7 +81,7 @@ class MissionController:
 
             # Move to the next waypoint if the current one is reached
             if np.array_equal(self.current_position, self.waypoints[target_waypoint_idx]):
-                target_waypoint_idx += 1
+                target_waypoint_idx = np.minimum(target_waypoint_idx + 1, len(self.waypoints) - 1)
 
             # Check if the mission is completed
             is_at_last_waypoint = np.array_equal(self.current_position, self.waypoints[-1])
