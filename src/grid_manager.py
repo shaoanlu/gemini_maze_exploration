@@ -30,8 +30,8 @@ class GridManager:
         for x in range(self.config.grid_size[0]):
             for y in range(self.config.grid_size[1]):
                 color = im[
-                    self.config.image_size - self.img2grid_scale * x - self.img2grid_scale // 2,
-                    self.img2grid_scale * y + self.img2grid_scale // 2,
+                    self.config.image_size - self.img2grid_scale * x - int(np.ceil(self.img2grid_scale / 2)),
+                    self.img2grid_scale * y + int(np.floor(self.img2grid_scale / 2)),
                 ][0]
                 self.grid[y, x] = 1 if color == self.config.threshold else 0
         return self.grid
